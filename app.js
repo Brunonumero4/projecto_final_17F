@@ -10,6 +10,7 @@ const connection = mysql.createConnection({
     database: `m17f_bruno`,
     port: 3306
   });
+
   
   connection.connect((err) => {
     if (err) {
@@ -57,8 +58,69 @@ const musica = "songs"
     
     });
 
-   app.put("/api/songs", (req,res) =>{
+   app.put("/api/songs/:id", (req,res) =>{
 
-    const myQuery = `UPDATE ${musica} SET title='${req.body.title}', artist='${req.body.artist}', album='${req.body.album}', genre='${req.body.genre}', duration_seconds='${req.body.duration_seconds}',`
+    const myQuery = `UPDATE ${musica} SET title='${req.body.title}', artist='${req.body.artist}', album='${req.body.album}', genre='${req.body.genre}', duration_seconds='${req.body.duration_seconds}' WHERE id=${req.params.id}`
 
-    })
+    connection.query(myQuery, (err, results) => {
+        if (err) {
+          return res.status(500).send('Erro a adicionar música' + err.message);
+        }
+      
+        res.json(results); 
+      
+      });
+      
+      });
+
+    app.delete("/api/songs/:id" , (req,res) =>{
+
+      const myQuery = `DELETE FROM ${musica}  WHERE id= ${req.params.id} `
+
+
+      connection.query(myQuery, (err, results) => {
+        if (err) {
+          return res.status(500).send('Erro a adicionar música' + err.message);
+        }
+      
+        res.json(results); 
+      
+      });
+      
+      });
+
+      app.get("/api/songs/:id", (req,res) => {
+
+        const myQuery = `SELECT * FROM ${musica} WHERE id= ${req.params.id}`
+    
+        connection.query(myQuery, (err, results) => {
+            if (err) {
+              return res.status(500).send('A música que procura não foi encontrada: ' + err.message);
+            }
+          
+            res.json(results); 
+        });
+      });
+
+let pricePerLike = 0.1 ;
+
+    app.get("/api/price" , (req,res) =>{
+
+     res.json(
+      {
+        "price" : pricePerLike
+      }
+     ); 
+
+    });
+
+  app.get("/api/sons/:id/revenue" , (req,res) =>{
+
+ const gostos = "likes"
+
+    res.json(
+      {
+        pricePerlike
+      }
+    )
+  })
