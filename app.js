@@ -114,13 +114,24 @@ let pricePerLike = 0.1 ;
 
     });
 
-  app.get("/api/sons/:id/revenue" , (req,res) =>{
 
- const gostos = "likes"
+  app.put("/api/price" , (req,res) =>{
+    pricePerLike = req.body.price;
+    res.status(200).send('Preço atualizado');
+      });
+      
+  
+
+  app.get("/api/sons/:id/revenue" , (req,res) =>{
+    
+const gostos = "likes"
+let preco = pricePerLike;
+
+let total = gostos*preco;
 
     res.json(
       {
-        pricePerlike
+        "Revenue": total
       }
     )
   })
