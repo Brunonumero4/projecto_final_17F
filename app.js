@@ -102,7 +102,7 @@ const musica = "songs"
         });
       });
 
-let pricePerLike = 0.1 ;
+let pricePerLike = 0.3 ;
 
     app.get("/api/price" , (req,res) =>{
 
@@ -122,16 +122,60 @@ let pricePerLike = 0.1 ;
       
   
 
-  app.get("/api/sons/:id/revenue" , (req,res) =>{
+   app.get("/api/songs/:id/revenue" , (req,res) =>{
+
+    const myQuery = `SELECT * FROM ${musica} WHERE id= ${req.params.id}`
     
-const gostos = "likes"
-let preco = pricePerLike;
-
-let total = gostos*preco;
-
-    res.json(
-      {
-        "Revenue": total
+    connection.query(myQuery, (err, results) => {
+      if (err) {
+        return res.status(500).send('Impossível identificar a revenue: ' + err.message);
       }
-    )
-  })
+    const conta =results[0].likes * pricePerLike;
+
+      res.json(conta); 
+  }); 
+});
+
+const bands = [
+  {
+    "artist": "Kendrick Lamar",
+    "band_members": ["Kendrick Lamar"],
+  },
+  {
+    "artist": "Blu Cantrell",
+    "band_members": ["Blue Cantrell"],
+  },
+  {
+    "artist": "BigXthaPlug",
+    "band_memebers": ["BigXthaPlug"],
+  },
+  {
+    "artist": "Bring Me The Horizon",
+    "band_memebers": ["Oliver Sykes",
+                      "Lee Malia",
+                      "Matt Kean",
+                      "Matt Nicholls",
+                      "Jordan Fish",
+                                      ]
+  }
+];
+
+app.get("/api/songs/:id/band", (req,res) => {
+
+  const myQuery = `SELECT * FROM ${musica} WHERE id= ${req.params.id}`
+
+  connection.query(myQuery, (err, results) => {
+      if (err) {
+        return res.status(500).send('A música que procura não foi encontrada: ' + err.message);
+      }
+
+      
+    for (let i= 0; i < bands[i]; i++)
+
+      if (bands[i] = results[0].artist) {
+        res.json(bands[i])
+      } else {
+        res.send ('Não encontrado')
+      }
+  });
+});
