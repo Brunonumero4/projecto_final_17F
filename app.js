@@ -148,17 +148,7 @@ const bands = [
   {
     "artist": "BigXthaPlug",
     "band_memebers": ["BigXthaPlug"],
-  },
-  {
-    "artist": "Bring Me The Horizon",
-    "band_memebers": ["Oliver Sykes",
-                      "Lee Malia",
-                      "Matt Kean",
-                      "Matt Nicholls",
-                      "Jordan Fish",
-                                      ]
-  }
-];
+  }];
 
 app.get("/api/songs/:id/band", (req,res) => {
 
@@ -168,14 +158,16 @@ app.get("/api/songs/:id/band", (req,res) => {
       if (err) {
         return res.status(500).send('A música que procura não foi encontrada: ' + err.message);
       }
+ 
+    for (let i= 0; i < bands.length; i++){
 
-      
-    for (let i= 0; i < bands[i]; i++)
-
-      if (bands[i] = results[0].artist) {
-        res.json(bands[i])
-      } else {
-        res.send ('Não encontrado')
+      if (bands[i].artist == results[0].artist) {
+        return res.json(bands[i]);
       }
+      
+    }
+
+    return res.status(404).send('Banda não encontrada.');
+
   });
 });
