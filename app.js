@@ -171,3 +171,53 @@ app.get("/api/songs/:id/band", (req,res) => {
 
   });
 });
+
+app.post("/api/songs/:id/band", (req,res) =>{
+
+  const newBandMembers = req.body.band_members;
+
+  const myQuery = `SELECT artist FROM songs WHERE id= ${req.params.id}  `
+
+  connection.query(myQuery, (err, results) => {
+    if (err) {
+      return res.status(500).send('Erro a adicionar música' + err.message);
+    }
+
+    const newBand = {
+      "artist": results[0].artist,
+      "band_members": newBandMembers
+    }
+
+    bands.push(newBand);
+
+    console.log(bands)
+  
+    res.status(200).send("Novos membros da banda adicionados")
+  
+  });
+  
+  });
+
+  app.put("/api/songs/:id/band", (req,res) =>{
+  
+    const myQuery = ``
+  
+    connection.query(myQuery, (err, results) => {
+      if (err) {
+        return res.status(500).send('Erro a adicionar música' + err.message);
+      }
+  
+      const newBand = {
+        "artist": results[0].artist,
+        "band_members": req.body.band_members
+      }
+  
+      bands.push(newBand);
+  
+      console.log(bands)
+    
+      res.status(200).send("Membros da banda atualizados")
+    
+    });
+    
+    });
