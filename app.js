@@ -200,24 +200,47 @@ app.post("/api/songs/:id/band", (req,res) =>{
 
   app.put("/api/songs/:id/band", (req,res) =>{
   
-    const myQuery = ``
+    const myQuery = `SELECT artist FROM songs WHERE id= ${req.params.id}  `
   
     connection.query(myQuery, (err, results) => {
       if (err) {
-        return res.status(500).send('Erro a adicionar música' + err.message);
+        return res.status(500).send('Erro a atualizar membros da banda' + err.message);
       }
   
-      const newBand = {
-        "artist": results[0].artist,
-        "band_members": req.body.band_members
+      for (let i= 0; i < bands.length; i++){
+
+        if (bands[i].artist == results[0].artist) {
+          bands[i].band_members = req.body.band_members
+          return res.status(200).send("Membros da banda atualizados")    
+        }
+        
       }
-  
-      bands.push(newBand);
-  
-      console.log(bands)
     
-      res.status(200).send("Membros da banda atualizados")
+      res.status(404).send("Membros da banda não encontrado")
     
     });
     
     });
+
+    app.delete("/api/songs/:id/band" , (req,res) =>{
+
+      const myQuery = `SELECT artist FROM songs WHERE id= ${req.params.id}  `
+
+
+      connection.query(myQuery, (err, results) => {
+        if (err) {
+          return res.status(500).send('Erro a apagar' + err.message);
+        }
+      
+        for (let i= 0; i < bands.length; i++){
+
+          if (bands[i].artist == results[0].artist) {
+            bands[i]={}
+            return res.status(200).send("Artista apagado")    
+          }
+          
+        } 
+      
+      });
+      
+      });
